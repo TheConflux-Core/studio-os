@@ -1,0 +1,163 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.dialTrack {
+  position: relative;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.trackBg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.trackFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: all 0.6s ease;
+}
+
+.tick {
+  position: absolute;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.tickDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-elevated);
+  transition: all 0.3s ease;
+}
+
+.tickActive .tickDot {
+  border-color: var(--bg-deep);
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.label:hover {
+  color: var(--text-secondary);
+}
+.labelActive {
+  font-weight: 600;
+}
+
+.description {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.capabilities {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.capRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+.capEnabled {
+  opacity: 1;
+}
+
+.capDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.capLabel {
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.savedBadge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #4ade80;
+  background: rgba(74,222,128,0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.activeBadge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.05);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.tickDisabled {
+  opacity: 0.35;
+}
+
+.labelDisabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.capAgent {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}

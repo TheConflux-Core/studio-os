@@ -1,0 +1,147 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.filterBtn {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.filterBtn:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  color: var(--text-secondary);
+}
+.filterActive {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: #a78bfa;
+}
+
+.tank {
+  flex: 1;
+  position: relative;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 280px;
+}
+
+.buoyancyLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.buoyancyLabel {
+  position: absolute;
+  right: 8px;
+  top: -8px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.15);
+  background: var(--bg-surface);
+  padding: 0 3px;
+}
+
+.bubble {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  border: 1px solid;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 140px;
+  max-width: 200px;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s;
+  z-index: 1;
+}
+.bubble:hover {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  z-index: 10;
+}
+
+.bubbleLabel {
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.priorityBadge {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: white;
+}
+
+.surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent);
+  pointer-events: none;
+}
+
+.legend {
+  padding: 6px 0 0;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.legendSep {
+  opacity: 0.4;
+}
+
+.legendNote {
+  opacity: 0.5;
+  font-style: italic;
+}

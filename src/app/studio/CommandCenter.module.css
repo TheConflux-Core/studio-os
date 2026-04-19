@@ -1,0 +1,479 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0;
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* ── TOP ROW ── */
+
+.topRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+/* Countdown card */
+.countdownCard {
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.countdownLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(245, 158, 11, 0.6);
+  margin-bottom: 8px;
+}
+
+.countdownNumbers {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.countdownItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.countdownValue {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #f59e0b;
+  line-height: 1;
+}
+
+.countdownUnit {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: rgba(245, 158, 11, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.countdownDivider {
+  font-size: 1.5rem;
+  color: rgba(245, 158, 11, 0.2);
+  margin-top: -8px;
+}
+
+.countdownBar {
+  height: 4px;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.countdownFill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  border-radius: 2px;
+}
+
+/* Launch card */
+.launchCard {
+  background: rgba(236, 72, 153, 0.06);
+  border: 1px solid rgba(236, 72, 153, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.launchLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(236, 72, 153, 0.6);
+  margin-bottom: 4px;
+}
+
+.launchDate {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ec4899;
+  margin-bottom: 8px;
+  letter-spacing: 0.03em;
+}
+
+.launchCountdown {
+  margin-bottom: 4px;
+}
+
+.launchNumber {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #ec4899;
+}
+
+.launchUnit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(236, 72, 153, 0.7);
+}
+
+.launchTarget {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(236, 72, 153, 0.4);
+}
+
+/* Revenue card */
+.revenueCard {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.revenueLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(16, 185, 129, 0.6);
+  margin-bottom: 8px;
+}
+
+.revenueValue {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.revenueDollar {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: #10b981;
+}
+
+.revenueAmount {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #10b981;
+  line-height: 1;
+}
+
+.revenueProgress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.revenueBar {
+  flex: 1;
+  height: 4px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.revenueFill {
+  height: 100%;
+  background: #10b981;
+  border-radius: 2px;
+}
+
+.revenueTarget {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: rgba(16, 185, 129, 0.5);
+  white-space: nowrap;
+}
+
+.revenueUsers {
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.usersPaid { color: #10b981; }
+.usersBeta { color: rgba(16, 185, 129, 0.5); }
+
+/* ── SECOND ROW ── */
+
+.secondRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+/* Mission card (security / audit) */
+.missionCard,
+.auditCard {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.missionCard { border-left: 3px solid #ef4444; }
+.auditCard { border-left: 3px solid #8b5cf6; }
+
+.missionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.missionBadge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+}
+
+.missionDue {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.missionTitle {
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.missionProgress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.missionProgressBar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.missionProgressFill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.missionPercent {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 28px;
+  text-align: right;
+}
+
+.missionOwners {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.owner {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.missionPhases,
+.auditPhases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.phasePill {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid;
+  font-weight: 600;
+}
+
+/* Divisions card */
+.divisionsCard {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.divisionsTitle {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.divisionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.divisionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.divisionDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.divisionEmoji {
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.divisionName {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  width: 52px;
+  flex-shrink: 0;
+}
+
+.divisionTask {
+  flex: 1;
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.divisionTime {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ── SCHEDULE ── */
+
+.scheduleCard {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.scheduleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.scheduleTitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.scheduleTime {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+.scheduleTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scheduleEvent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.scheduleEvent:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--border-subtle);
+}
+
+.eventPast {
+  opacity: 0.5;
+}
+
+.eventCurrent {
+  opacity: 1;
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+.eventTime {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.eventAgent {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.eventTitle {
+  flex: 1;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.eventStatus {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  width: 64px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.expandChevron {
+  font-size: 16px;
+  color: var(--text-muted);
+  display: inline-block;
+  line-height: 1;
+}
