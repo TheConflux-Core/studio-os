@@ -1,12 +1,28 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { getCompanyMetrics } from "@/data/businessCalendars";
 import styles from "./MetricsStrip.module.css";
 
+interface Metrics {
+  q2DaysRemaining: number; q2DaysTotal: number; q2Progress: number;
+  launchDaysRemaining: number; securityDaysRemaining: number;
+  securityProgress: number; auditProgress: number;
+  revenue: number; revenueTarget: number;
+  betaUsers: number; betaTarget: number; paidUsers: number; paidTarget: number;
+}
+
 export default function MetricsStrip() {
-  const m = getCompanyMetrics();
+  const [m, setM] = useState<Metrics | null>(null);
+
+  useEffect(() => {
+    fetch("/api/studio/metrics", { cache: "no-store" })
+      .then((r) => r.json())
+      .then(setM)
+      .catch(() => null);
+  }, []);
+
+  if (!m) return <div className={styles.container} style={{ opacity: 0.3 }}>Loading...</div>;
 
   return (
     <div className={styles.container}>

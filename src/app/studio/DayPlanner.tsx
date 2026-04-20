@@ -2,8 +2,22 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { getTodaySchedule, ScheduledEvent } from "@/data/businessCalendars";
 import styles from "./DayPlanner.module.css";
+
+interface ScheduledEvent {
+  id: string;
+  time: string;
+  agentId: string;
+  agentName: string;
+  agentEmoji: string;
+  agentColor: string;
+  division: string;
+  title: string;
+  description: string;
+  type: string;
+  status: "pending" | "running" | "done" | "missed";
+  completedAt?: string;
+}
 
 const DIVISION_COLORS: Record<string, string> = {
   strategy:    "#f59e0b",
@@ -45,7 +59,17 @@ export default function DayPlanner() {
   const [nowPos, setNowPos] = useState(0);
 
   useEffect(() => {
-    setEvents(getTodaySchedule());
+    async function loadSchedule() {
+      try {
+        const res = await fetch("/api/studio/schedule", { cache: "no-store" });
+        if (!res.ok) throw new Error("fetch failed");
+        const json = await res.json();
+        if (json.events) setEvents(json.events);
+      } catch {
+        // Fallback: will show empty (schedule route will provide defaults on error)
+      }
+    }
+    loadSchedule();
     setNowPos(getCurrentTimePosition());
 
     const tick = setInterval(() => {
