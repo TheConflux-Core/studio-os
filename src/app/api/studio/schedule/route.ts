@@ -32,7 +32,7 @@ interface CronSchedule {
   email_monitoring_pm?: CronJob;
   github_monitoring?: CronJob;
   afternoon_chain?: { agents: CronJob[] };
-  nightly_chain?: CronJob[];
+  nightly_chain?: { agents: CronJob[] };
   dead_letter_check?: CronJob;
   circuit_breaker_reset_check?: CronJob;
   total_crons: number;
@@ -174,7 +174,7 @@ export async function GET() {
     const allJobs: CronJob[] = [
       ...schedule.morning_chain.agents,
       ...(schedule.afternoon_chain?.agents ?? []),
-      ...(schedule.nightly_chain ?? []),
+      ...(schedule.nightly_chain?.agents ?? []),
     ];
 
     if (schedule.catalyst) {
