@@ -27,7 +27,7 @@ interface CronSchedule {
   design_doc: string;
   priority_tiers: Record<string, string[]>;
   morning_chain: { agents: CronJob[] };
-  catalyst?: { job_id: string; name: string; agent: string; schedule: string };
+  catalyst?: CronJob;
   email_monitoring?: CronJob;
   email_monitoring_pm?: CronJob;
   github_monitoring?: CronJob;
@@ -52,9 +52,13 @@ interface ScheduledEvent {
   status: "pending" | "running" | "done" | "missed";
   completedAt?: string;
   priority: string;
+  schedule_description: string;
   window_minutes: number;
   depends_on: string[];
   output_ref?: string;
+  circuit_breaker_threshold: number;
+  rate_limit_max: number;
+  job_id: string;
 }
 
 const AGENT_MAP: Record<string, { name: string; emoji: string; color: string; division: string }> = {
@@ -155,9 +159,13 @@ function jobToEvent(job: CronJob, time: string): ScheduledEvent {
     description: job.notes ?? "",
     type: getAgentType(job.agent, job.name),
     priority: job.priority,
+    schedule_description: job.schedule_description,
     window_minutes: job.window_minutes,
     depends_on: job.depends_on ?? [],
     output_ref: job.output_ref,
+    circuit_breaker_threshold: job.circuit_breaker_threshold,
+    rate_limit_max: job.rate_limit_max,
+    job_id: job.job_id,
     status: "pending",
   };
 }
@@ -178,19 +186,7 @@ export async function GET() {
     ];
 
     if (schedule.catalyst) {
-      allJobs.push({
-        job_id: schedule.catalyst.job_id,
-        name: schedule.catalyst.name,
-        agent: schedule.catalyst.agent,
-        schedule: schedule.catalyst.schedule,
-        schedule_description: "Every 5 minutes, midnight–10 PM MDT",
-        window_minutes: 2,
-        priority: "HIGH",
-        depends_on: [],
-        circuit_breaker_threshold: 5,
-        rate_limit_max: 20,
-        notes: "Every 5 minutes polling loop — Catalyst decision engine",
-      });
+      allJobs.push(schedule.catalyst);
     }
 
     if (schedule.email_monitoring) allJobs.push(schedule.email_monitoring);
