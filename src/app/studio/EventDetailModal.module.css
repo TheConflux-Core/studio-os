@@ -2,19 +2,19 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
   z-index: 1000;
 }
 
 /* ── Modal shell ── */
 .modal {
   position: fixed;
-  top: 50%;
+  top: 16px;
+  bottom: 16px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   width: min(680px, calc(100vw - 32px));
-  max-height: calc(100vh - 64px);
   background: #0f0f18;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
