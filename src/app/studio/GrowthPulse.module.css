@@ -1,0 +1,110 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.loading, .empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 24px;
+  color: #6b7280;
+  font-size: 12px;
+  text-align: center;
+}
+
+.latestBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: rgba(236,72,153,0.06);
+  border: 1px solid rgba(236,72,153,0.15);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.latestDate {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #ec4899;
+  font-weight: 600;
+}
+
+.phStats {
+  display: flex;
+  gap: 8px;
+}
+
+.phUpvotes {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #ec4899;
+  font-weight: 600;
+}
+
+.phComments {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.feed {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 2px;
+}
+
+.feed::-webkit-scrollbar { width: 4px; }
+.feed::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.cardDate {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.highlight {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}

@@ -13,17 +13,25 @@ import MissionTracker from "./MissionTracker";
 import DayPlanner from "./DayPlanner";
 import MetricsStrip from "./MetricsStrip";
 import AgentComms from "./AgentComms";
+import Employees from "./Employees";
 import MissionControl from "./MissionControl";
+import SecurityWatch from "./SecurityWatch";
+import MorningIntel from "./MorningIntel";
+import PipelineMonitor from "./PipelineMonitor";
+import GrowthPulse from "./GrowthPulse";
+import EmailInbox from "./EmailInbox";
 import { AGENTS, Agent } from "@/data/agentRoster";
 import styles from "./page.module.css";
 
-type Tab = "today" | "missions" | "comms" | "the-org";
+type Tab = "today" | "missions" | "comms" | "intel" | "the-org" | "employees";
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
-  { id: "today",    label: "Today",       icon: "📅" },
-  { id: "missions", label: "Missions",    icon: "🎯" },
-  { id: "comms",    label: "Comms",       icon: "⚡" },
-  { id: "the-org",   label: "The Org",    icon: "🪐" },
+  { id: "today",     label: "Today",       icon: "📅" },
+  { id: "missions",  label: "Missions",    icon: "🎯" },
+  { id: "comms",     label: "Comms",       icon: "⚡" },
+  { id: "intel",     label: "Intel",       icon: "📡" },
+  { id: "the-org",   label: "The Org",     icon: "🪐" },
+  { id: "employees", label: "Employees",   icon: "👥" },
 ];
 
 function useCanonicalStats() {
@@ -181,6 +189,51 @@ export default function StudioOSPage() {
                   <DecisionCortex />
                 </div>
               </div>
+            </motion.div>
+          )}
+
+          {/* ── INTEL ── */}
+          {activeTab === "intel" && (
+            <motion.div
+              key="intel"
+              className={styles.intelLayout}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className={styles.intelMain}>
+                <div className="glass-card" style={{ padding: 16, overflow: "auto" }}>
+                  <SecurityWatch />
+                </div>
+                <div className="glass-card" style={{ padding: 16, overflow: "auto" }}>
+                  <MorningIntel />
+                </div>
+                <div className="glass-card" style={{ padding: 16, overflow: "auto" }}>
+                  <GrowthPulse />
+                </div>
+              </div>
+              <div className={styles.intelSide}>
+                <div className="glass-card" style={{ padding: 16, overflow: "auto" }}>
+                  <PipelineMonitor />
+                </div>
+                <div className="glass-card" style={{ padding: 16, overflow: "auto" }}>
+                  <EmailInbox />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* ── EMPLOYEES ── */}
+          {activeTab === "employees" && (
+            <motion.div
+              key="employees"
+              className={styles.employeesLayout}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{ height: "100%", display: "flex", flexDirection: "column" }}
+            >
+              <Employees />
             </motion.div>
           )}
 

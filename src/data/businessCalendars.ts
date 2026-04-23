@@ -211,7 +211,7 @@ export function getCompanyMetrics(): CompanyMetrics {
   const launchDaysRemaining = Math.max(0, Math.round((launchDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
   const securityDaysRemaining = Math.max(0, Math.round((securityDue.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
   const securityProgress = Math.min(100, Math.round(((30 - securityDaysRemaining) / 30) * 100));
-  const auditProgress = MathMin(100, Math.round(((45 - (45 - Math.round((now.getTime() - new Date("2026-05-01").getTime()) / (1000 * 60 * 60 * 24)))) / 14) * 100));
+  const auditProgress = Math.min(100, Math.round(((45 - (45 - Math.round((now.getTime() - new Date("2026-05-01").getTime()) / (1000 * 60 * 60 * 24)))) / 14) * 100));
 
   return {
     q2DaysRemaining,

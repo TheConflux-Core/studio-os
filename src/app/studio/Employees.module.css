@@ -1,0 +1,420 @@
+/* EMPLOYEES — Back-office schedule view */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(6, 6, 15, 0.6);
+}
+
+/* ── TOOLBAR ── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.toolbarLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.toolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resetBtn {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ── TABLE HEADER ── */
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 36px 48px 200px 120px 110px 150px 90px 90px 90px 70px 1fr;
+  gap: 0;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.tableHeader > div {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.dragHandleCol { width: 20px; }
+.avatarCol { width: 32px; }
+.nameCol { flex: 1; }
+.cellCol { text-align: center; }
+.focusCol { padding-left: 8px; }
+
+/* ── TABLE BODY ── */
+
+.tableBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reorderItem {
+  list-style: none;
+  cursor: grab;
+  touch-action: none;
+}
+.reorderItem:active {
+  cursor: grabbing;
+}
+
+/* ── AGENT ROW ── */
+
+.agentRow {
+  display: grid;
+  grid-template-columns: 36px 48px 200px 120px 110px 150px 90px 90px 90px 70px 1fr;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background 0.15s, box-shadow 0.15s;
+  position: relative;
+}
+
+.agentRow:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.agentRow.dragging {
+  background: rgba(139, 92, 246, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.3);
+  z-index: 100;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+/* ── DRAG HANDLE ── */
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.15s;
+  cursor: grab;
+}
+.agentRow:hover .dragHandle {
+  opacity: 1;
+}
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+/* ── AVATAR ── */
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* ── NAME BLOCK ── */
+
+.nameBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.agentName {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agentRole {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.03em;
+}
+
+/* ── CELLS ── */
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.scheduleCell, .peakCell, .focusCell {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* ── DIVISION BADGE ── */
+
+.divisionBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  background: rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+/* ── SCHEDULE ── */
+
+.scheduleLabel, .energyLabel {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  display: none;
+}
+
+.scheduleValue {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+/* ── AUTONOMY ── */
+
+.autonomyCell {
+  align-items: center;
+}
+
+.autonomyBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 1px solid;
+}
+
+.autonomy_full   { border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.08); }
+.autonomy_high   { border-color: #38bdf8; color: #38bdf8; background: rgba(56, 189, 248, 0.08); }
+.autonomy_medium { border-color: #fbbf24; color: #fbbf24; background: rgba(251, 191, 36, 0.08); }
+.autonomy_low    { border-color: #6b7280; color: #6b7280; background: rgba(107, 114, 128, 0.08); }
+
+/* ── STATUS ── */
+
+.statusCell {
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+}
+
+.statusDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.statusLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+/* ── LOAD BAR ── */
+
+.loadCell {
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+}
+
+.loadBar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  max-width: 50px;
+}
+
+.loadFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.loadValue {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 30px;
+}
+
+/* ── ENERGY ── */
+
+.energyCell {
+  flex-direction: row;
+  gap: 4px;
+  align-items: baseline;
+}
+
+.energyValue {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ── FOCUS ── */
+
+.focusCell {
+  align-items: flex-start;
+  padding-left: 8px;
+}
+
+.focusText {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── DIVISION SUMMARY ── */
+
+.divisionSummary {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.divisionPill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.divisionCount {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0 5px;
+  font-size: 8px;
+}
+
+/* ── RESPONSIVE ── */
+
+@media (max-width: 1100px) {
+  .agentRow,
+  .tableHeader {
+    grid-template-columns: 36px 40px 150px 90px 80px 110px 70px 70px 70px 50px 1fr;
+  }
+  .peakCell { display: none; }
+  .scheduleLabel, .energyLabel { display: none; }
+}
+
+@media (max-width: 800px) {
+  .agentRow,
+  .tableHeader {
+    grid-template-columns: 36px 36px 1fr 80px 60px 1fr;
+  }
+  .divisionCol,
+  .peakCell,
+  .autonomyCell,
+  .energyCell,
+  .focusCell { display: none; }
+  .scheduleLabel { display: none; }
+}

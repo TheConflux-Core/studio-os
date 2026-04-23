@@ -1,11 +1,26 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getAgentCommsData, getRecentActivity, timeAgo, AgentActivity } from "@/data/businessCalendars";
 import styles from "./AgentComms.module.css";
 
-const TYPE_CONFIG = {
+// ---- Types ----
+
+type EventType = "discovery" | "build" | "verify" | "security" | "strategy" | "growth" | "ops" | "social";
+
+interface AgentEvent {
+  id: string;
+  agentId: string;
+  agentName: string;
+  agentEmoji: string;
+  color: string;
+  type: EventType;
+  action: string;
+  timestamp: string;
+  priority: "low" | "medium" | "high";
+}
+
+const TYPE_CONFIG: Record<string, { emoji: string; color: string; label: string }> = {
   scan:      { emoji: "🔍", color: "#06b6d4", label: "Scan" },
   report:   { emoji: "📊", color: "#10b981", label: "Report" },
   build:    { emoji: "🔨", color: "#8b5cf6", label: "Build" },
@@ -18,31 +33,74 @@ const TYPE_CONFIG = {
   standup:  { emoji: "📋", color: "#8b5cf6", label: "Standup" },
   sync:     { emoji: "🔄", color: "#6b7280", label: "Sync" },
   pipeline: { emoji: "⚡", color: "#8b5cf6", label: "Pipeline" },
-  dream:    { emoji: "🌙", color: "#f59e0b", label: "Dream Cycle" },
-} as const satisfies Record<string, { emoji: string; color: string; label: string }>;
+  dream:    { emoji: "🌙", color: "#f59e0b", label: "Dream" },
+  ops:      { emoji: "⚙️", color: "#10b981", label: "Ops" },
+  social:   { emoji: "💬", color: "#6b7280", label: "Social" },
+  discovery:{ emoji: "🔍", color: "#06b6d4", label: "Discovery" },
+  strategy: { emoji: "🎯", color: "#f59e0b", label: "Strategy" },
+};
 
 type Tab = "activity" | "outbound" | "escalations";
 
+function timeAgo(timestamp: string): string {
+  const now = Date.now();
+  const then = new Date(timestamp).getTime();
+  const diff = Math.floor((now - then) / 1000);
+  if (diff < 60) return "just now";
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  return `${Math.floor(diff / 86400)}d ago`;
+}
+
 export default function AgentComms() {
-  const [activity, setActivity] = useState<AgentActivity[]>([]);
+  const [events, setEvents] = useState<AgentEvent[]>([]);
   const [tab, setTab] = useState<Tab>("activity");
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [source, setSource] = useState<"live" | "simulated" | "empty">("empty");
 
-  useEffect(() => {
-    setActivity(getRecentActivity());
-    const id = setInterval(() => {
-      setActivity(getRecentActivity());
-    }, 60000);
-    return () => clearInterval(id);
+  const fetchEvents = useCallback(async () => {
+    try {
+      const res = await fetch("/api/studio/events", { cache: "no-store" });
+      if (!res.ok) throw new Error("fetch failed");
+      const json = await res.json();
+      if (json.events && Array.isArray(json.events)) {
+        setEvents(json.events);
+        setSource(json.source ?? "live");
+      }
+    } catch {
+      setSource("empty");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const outboundMessages = activity.filter((a) => a.type === "email" || a.target === "Don");
-  const escalations = activity.filter(
-    (a) => a.action.toLowerCase().includes("block") ||
-           a.action.toLowerCase().includes("escalat") ||
-           a.action.toLowerCase().includes("urgent") ||
-           a.action.toLowerCase().includes("failed")
+  useEffect(() => {
+    fetchEvents();
+    const id = setInterval(fetchEvents, 30000);
+    return () => clearInterval(id);
+  }, [fetchEvents]);
+
+  const outboundMessages = events.filter(
+    (e) =>
+      e.action.toLowerCase().includes("email") ||
+      e.action.toLowerCase().includes("digest") ||
+      e.action.toLowerCase().includes("brief") ||
+      e.action.toLowerCase().includes("to don")
   );
+
+  const escalations = events.filter(
+    (e) =>
+      e.priority === "high" ||
+      e.action.toLowerCase().includes("urgent") ||
+      e.action.toLowerCase().includes("critical") ||
+      e.action.toLowerCase().includes("security") ||
+      e.action.toLowerCase().includes("cve") ||
+      e.action.toLowerCase().includes("vulnerability") ||
+      e.action.toLowerCase().includes("flagged")
+  );
+
+  const displayEvents = tab === "activity" ? events : tab === "outbound" ? outboundMessages : escalations;
 
   return (
     <div className={styles.container}>
@@ -53,7 +111,8 @@ export default function AgentComms() {
           onClick={() => setTab("activity")}
         >
           ⚡ Agent Activity
-          <span className={styles.tabCount}>{activity.length}</span>
+          <span className={styles.tabCount}>{events.length}</span>
+          {source === "live" && <span className={styles.liveDot}>●</span>}
         </button>
         <button
           className={`${styles.tab} ${tab === "outbound" ? styles.tabActive : ""}`}
@@ -73,35 +132,55 @@ export default function AgentComms() {
         </button>
       </div>
 
-      {/* Activity feed */}
+      {/* Source indicator */}
+      <div className={styles.sourceBar}>
+        {source === "live" && <span className={styles.liveBadge}>LIVE — RUN_LOG.md</span>}
+        {source === "simulated" && <span className={styles.simulatedBadge}>SIMULATED</span>}
+        {source === "empty" && <span className={styles.emptyBadge}>No events yet — agents haven&apos;t fired today</span>}
+      </div>
+
+      {/* Feed */}
       <div className={styles.feed}>
         <AnimatePresence initial={false}>
-          {(tab === "activity" ? activity : tab === "outbound" ? outboundMessages : escalations).map((item, i) => {
-            const cfg = TYPE_CONFIG[item.type];
-            const isExpanded = expanded === `${item.agentId}-${i}`;
+          {loading && [1, 2, 3].map((i) => (
+            <div key={`skel-${i}`} className={styles.skeleton} />
+          ))}
+
+          {!loading && displayEvents.length === 0 && (
+            <div className={styles.empty}>
+              {tab === "activity" && <span>No agent activity recorded yet</span>}
+              {tab === "outbound" && <span>No outbound messages to Don</span>}
+              {tab === "escalations" && <span>🟢 No escalations — things are running clean</span>}
+            </div>
+          )}
+
+          {displayEvents.map((item, i) => {
+            const cfg = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.report;
+            const isExpanded = expanded === item.id;
+
             return (
               <motion.div
-                key={`${item.agentId}-${i}`}
+                key={item.id}
                 className={styles.activityCard}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ delay: i * 0.04 }}
+                transition={{ delay: i * 0.03 }}
               >
                 {/* Card header */}
                 <button
                   className={styles.cardHeader}
-                  onClick={() => setExpanded(isExpanded ? null : `${item.agentId}-${i}`)}
+                  onClick={() => setExpanded(isExpanded ? null : item.id)}
                 >
                   <div className={styles.cardLeft}>
                     <span
                       className={styles.agentAvatar}
-                      style={{ borderColor: item.agentColor }}
+                      style={{ borderColor: item.color }}
                     >
                       {item.agentEmoji}
                     </span>
                     <div className={styles.cardMeta}>
-                      <span className={styles.agentName} style={{ color: item.agentColor }}>
+                      <span className={styles.agentName} style={{ color: item.color }}>
                         {item.agentName}
                       </span>
                       <span className={styles.actionText}>{item.action}</span>
@@ -124,7 +203,7 @@ export default function AgentComms() {
                   </div>
                 </button>
 
-                {/* Expanded proof */}
+                {/* Expanded details */}
                 <AnimatePresence>
                   {isExpanded && (
                     <motion.div
@@ -136,19 +215,19 @@ export default function AgentComms() {
                     >
                       <div className={styles.proofInner}>
                         <div className={styles.proofSection}>
-                          <span className={styles.proofLabel}>PROOF</span>
-                          <p className={styles.proofText}>{item.proof}</p>
+                          <span className={styles.proofLabel}>FULL ACTION</span>
+                          <p className={styles.proofText}>{item.action}</p>
                         </div>
                         <div className={styles.proofSection}>
-                          <span className={styles.proofLabel}>EVIDENCE</span>
-                          <code className={styles.proofEvidence}>{item.evidence}</code>
+                          <span className={styles.proofLabel}>TIMESTAMP</span>
+                          <span className={styles.proofTarget}>
+                            {new Date(item.timestamp).toLocaleString()}
+                          </span>
                         </div>
-                        {item.target && (
-                          <div className={styles.proofSection}>
-                            <span className={styles.proofLabel}>TO</span>
-                            <span className={styles.proofTarget}>{item.target}</span>
-                          </div>
-                        )}
+                        <div className={styles.proofSection}>
+                          <span className={styles.proofLabel}>SOURCE</span>
+                          <span className={styles.proofTarget}>RUN_LOG.md via /api/studio/events</span>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -157,12 +236,6 @@ export default function AgentComms() {
             );
           })}
         </AnimatePresence>
-
-        {escalations.length === 0 && tab === "escalations" && (
-          <div className={styles.empty}>
-            <span>🟢 No escalations — things are running clean</span>
-          </div>
-        )}
       </div>
     </div>
   );

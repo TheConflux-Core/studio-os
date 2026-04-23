@@ -448,6 +448,11 @@
 
 /* ── THE ORG LAYOUT ── */
 
+.employeesLayout {
+  height: 100%;
+  overflow: hidden;
+}
+
 .orgLayout {
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -483,4 +488,50 @@
   flex: 1;
   min-height: 0;
   border-bottom: none;
+}
+
+/* ── INTEL LAYOUT ── */
+
+.intelLayout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.intelMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  border-right: 1px solid var(--border-subtle);
+}
+
+.intelMain > div {
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: 300px;
+}
+
+.intelMain > div:last-child {
+  border-bottom: none;
+  flex: 1;
+}
+
+.intelSide {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+}
+
+.intelSide > div {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: 200px;
+}
+
+.intelSide > div:last-child {
+  border-bottom: none;
+  flex: 1;
 }
